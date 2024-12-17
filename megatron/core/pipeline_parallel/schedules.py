@@ -363,6 +363,7 @@ def backward_step(input_tensor, output_tensor, output_tensor_grad, model_type, c
     if config.deallocate_pipeline_outputs:
         custom_backward(output_tensor[0], output_tensor_grad[0])
     else:
+        output_tensor[0].requires_grad_(True)
         torch.autograd.backward(output_tensor[0], grad_tensors=output_tensor_grad[0])
 
     # Collect the grad of the input_tensor.

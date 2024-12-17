@@ -51,6 +51,7 @@ def parse_args(extra_args_provider=None, ignore_unknown_args=False):
     parser = _add_one_logger_args(parser)
     parser = _add_ft_package_args(parser)
     parser = _add_config_logger_args(parser)
+    parser = _add_vlm_args(parser)
 
     # Custom arguments.
     if extra_args_provider is not None:
@@ -1690,7 +1691,8 @@ def _add_data_args(parser):
                                 'HuggingFaceTokenizer',
                                 'Llama2Tokenizer',
                                 'TikTokenizer',
-                                'NullTokenizer'],
+                                'NullTokenizer',
+                                'VlmTokenizer'],
                        help='What type of tokenizer to use.')
     group.add_argument('--tokenizer-model', type=str, default=None,
                        help='Sentencepiece tokenizer model.')
@@ -1926,4 +1928,19 @@ def _add_experimental_args(parser):
                        'pattern')
     group.add_argument('--yaml-cfg', type=str, default=None,
                        help = 'Config file to add additional arguments')
+    return parser
+
+
+### lrj-vlm
+def _add_vlm_args(parser):
+    group = parser.add_argument_group(title='megrezo')
+
+    group.add_argument("--vlm-data-path", type=str,
+        default="/home/infiniai/linrongjian/Megatron-LM/megatron/core/models/multimodal/output/demo_data_fix"
+    )
+    group.add_argument("--lr-scheduler-type", type=str, default="cosine")
+    group.add_argument("--model-name-or-path", type=str,
+        default="/home/infiniai/linrongjian/Megatron-LM/megatron/core/models/multimodal/output/init_model/init_0828"
+    )
+    group.add_argument("--model-max-length", type=int, default=4096)
     return parser

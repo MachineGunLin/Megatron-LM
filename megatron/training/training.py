@@ -1644,6 +1644,7 @@ def build_train_valid_test_datasets(build_train_valid_test_datasets_provider):
     return build_train_valid_test_datasets_provider(train_valid_test_num_samples)
 
 
+from megatron.core.models.multimodal.dataset import data_collator
 def build_train_valid_test_data_loaders(
         build_train_valid_test_datasets_provider):
     """Build pretraining data loaders."""
@@ -1699,6 +1700,8 @@ def build_train_valid_test_data_loaders(
     args.do_valid = getattr(args, "do_valid", False) or flags[1].item()
     args.do_test = getattr(args, "do_test", False) or flags[2].item()
 
+    train_dataloader.collate_fn = data_collator
+
     return train_dataloader, valid_dataloader, test_dataloader
 
 
@@ -1712,6 +1715,8 @@ def build_train_valid_test_data_iterators(
     train_dataloader, valid_dataloader, test_dataloader = \
         build_train_valid_test_data_loaders(
             build_train_valid_test_datasets_provider)
+
+    train_dataloader.collate_fn = data_collator
 
     # Build iterators.
     dl_type = args.dataloader_type

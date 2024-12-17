@@ -16,6 +16,9 @@ from megatron.core.datasets.megatron_tokenizer import MegatronTokenizer
 from .bert_tokenization import FullTokenizer as FullBertTokenizer
 from .gpt2_tokenization import GPT2Tokenizer
 
+### lrj-vlm
+from transformers import AutoTokenizer
+
 
 def build_tokenizer(args, **kwargs):
     """Initialize tokenizer."""
@@ -64,6 +67,14 @@ def build_tokenizer(args, **kwargs):
     elif args.tokenizer_type == 'NullTokenizer':
         assert args.vocab_size is not None
         tokenizer = _NullTokenizer(args.vocab_size)
+    ### lrj-vlm
+    elif args.tokenizer_type == 'VlmTokenizer':
+        tokenizer = AutoTokenizer.from_pretrained(
+            "/home/infiniai/linrongjian/Megatron-LM/megatron/core/models/multimodal/output/init_model/init_0828",
+            use_fast=False,
+            trust_remote_code=True
+        )
+    ### lrj-vlm
     else:
         raise NotImplementedError('{} tokenizer is not '
                                   'implemented.'.format(args.tokenizer_type))
